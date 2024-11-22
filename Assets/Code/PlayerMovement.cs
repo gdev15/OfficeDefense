@@ -2,9 +2,12 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
+    public GameObject projectilePrefab;     // Reference to Projectile
+
     public float moveSpeed = 5f;            // Speed of player movement (horizontal)
     public float jumpForce = 10f;           // Force of the jump (if you want to keep jumping functionality)
     public LayerMask groundLayer;           // Ground layer mask to check if player is grounded
+    public float firingTimer = 0f;          // Delay for firing projectile
 
     private Rigidbody2D rb;                 // Reference to the Rigidbody2D
     private BoxCollider2D boxCollider;      // Reference to the BoxCollider2D
@@ -21,6 +24,12 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
+        if (firingTimer > 0f)
+        {
+            // Subtract the different of the last time fired
+            firingTimer -= Time.deltaTime;
+        }
+
         // Check if the player is grounded (if you want to keep the jump functionality)
         isGrounded = IsGrounded();
 
@@ -32,6 +41,13 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetButtonDown("Jump") && isGrounded) // Space bar or other jump input
         {
             Jump();
+        }
+
+        // Handle shooting projectile
+        if (Input.GetKeyDown(KeyCode.Space) && firingTimer <= 0)
+        {
+            FireProjectile();
+            firingTimer = 1f;
         }
     }
 
@@ -51,6 +67,11 @@ public class PlayerMovement : MonoBehaviour
         {
             transform.localScale = new Vector3(Mathf.Sign(horizontalInput), 1, 1);
         }
+    }
+
+    public void FireProjectile()
+    {
+        Instantiate(projectilePrefab, transform.position + new Vector3(0, 0.8f, 0), Quaternion.identity);
     }
 
     private void Jump()

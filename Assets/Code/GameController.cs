@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class GameController : MonoBehaviour
 {
@@ -9,6 +10,7 @@ public class GameController : MonoBehaviour
     // Outlets
     public Transform[] spawnPoints;
     public GameObject[] enemyPrefabs;
+    public TMP_Text textScore;
 
     // Configuration
     public float maxEnemyDelay = 2f;
@@ -17,6 +19,8 @@ public class GameController : MonoBehaviour
     // State Tracking
     public float timeElapsed;
     public float enemyDelay;
+    public float missileSpeed = 2f;
+    public int score;
 
     void Awake()
     {
@@ -26,6 +30,8 @@ public class GameController : MonoBehaviour
     void Start()
     {
         StartCoroutine("EnemySpawnTimer");
+
+        score = 0;
     }
 
     void Update()
@@ -36,6 +42,18 @@ public class GameController : MonoBehaviour
         // Compute Enemy Delay
         float decreaseDelayOverTime = maxEnemyDelay - ((maxEnemyDelay - minEnemyDelay) / 30f * timeElapsed);
         enemyDelay = Mathf.Clamp(decreaseDelayOverTime, minEnemyDelay, maxEnemyDelay);
+
+        UpdateDisplay();
+    }
+
+    void UpdateDisplay()
+    {
+        textScore.text = score.ToString();
+    }
+
+    public void EarnPoints(int pointAmount)
+    {
+        score += Mathf.RoundToInt(pointAmount);
     }
 
     void SpawnEnemy()
