@@ -1,13 +1,21 @@
 using UnityEngine;
+using UnityEngine.AdaptivePerformance.VisualScripting;
+using UnityEngine.UI;
 
 public class PlayerMovement : MonoBehaviour
 {
+    public static PlayerMovement instance;
+
     public GameObject projectilePrefab;     // Reference to Projectile
+    public Image imageHealthBar;  // Reference to UI Healthbar
 
     public float moveSpeed = 5f;            // Speed of player movement (horizontal)
     public float jumpForce = 10f;           // Force of the jump (if you want to keep jumping functionality)
     public LayerMask groundLayer;           // Ground layer mask to check if player is grounded
     public float firingTimer = 0f;          // Delay for firing projectile
+    public float health = 100f;             // Players health amount
+    public float healthMax = 100f;          // Players max health amount
+    public bool isPaused;                   // If menu showing, pause the game
 
     private Rigidbody2D rb;                 // Reference to the Rigidbody2D
     private BoxCollider2D boxCollider;      // Reference to the BoxCollider2D
@@ -17,6 +25,8 @@ public class PlayerMovement : MonoBehaviour
 
     private void Awake()
     {
+        instance = this;
+
         // Get references to the Rigidbody2D and BoxCollider2D
         rb = GetComponent<Rigidbody2D>();
         boxCollider = GetComponent<BoxCollider2D>();
@@ -24,30 +34,38 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
+        if (isPaused)
+        {
+            return;
+        }
+
         if (firingTimer > 0f)
         {
             // Subtract the different of the last time fired
             firingTimer -= Time.deltaTime;
         }
 
-        // Check if the player is grounded (if you want to keep the jump functionality)
-        isGrounded = IsGrounded();
-
-        // Handle horizontal movement (left and right)
-        float horizontalInput = Input.GetAxis("Horizontal"); // A/D or Left/Right arrow keys
-        Move(horizontalInput); // Pass only horizontal input
-
-        // Handle jumping (optional)
-        if (Input.GetButtonDown("Jump") && isGrounded) // Space bar or other jump input
+        if (health > 0)
         {
-            Jump();
-        }
+            // Check if the player is grounded (if you want to keep the jump functionality)
+            isGrounded = IsGrounded();
 
-        // Handle shooting projectile
-        if (Input.GetKeyDown(KeyCode.Space) && firingTimer <= 0)
-        {
-            FireProjectile();
-            firingTimer = 1f;
+            // Handle horizontal movement (left and right)
+            float horizontalInput = Input.GetAxis("Horizontal"); // A/D or Left/Right arrow keys
+            Move(horizontalInput); // Pass only horizontal input
+
+            // Handle jumping (optional)
+            if (Input.GetButtonDown("Jump") && isGrounded) // Space bar or other jump input
+            {
+                Jump();
+            }
+
+            // Handle shooting projectile
+            if (Input.GetKeyDown(KeyCode.Space) && firingTimer <= 0)
+            {
+                FireProjectile();
+                firingTimer = 1f;
+            }
         }
     }
 
@@ -78,6 +96,31 @@ public class PlayerMovement : MonoBehaviour
     {
         // Apply a vertical force for jumping (optional)
         rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+    }
+
+    void Die()
+    {
+        MenuController.instance.ShowDeathMenu();
+    }
+
+    void TakeDamage(float damageAMount)
+    {
+        health -= damageAMount;
+        if(health <= 0)
+        {
+            Die();
+        }
+
+        imageHealthBar.fillAmount = health / healthMax;
+    }
+
+    private void OnCollisionEnter2D(Collision2D other)
+    {
+        if (other.gameObject.GetComponent<EnemyController>())
+        {
+            TakeDamage(10f);
+            Destroy(other.gameObject);
+        }
     }
 
     private bool IsGrounded()
