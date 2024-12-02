@@ -41,7 +41,7 @@ public class TitleScreenController : MonoBehaviour
             string currentText = evt.newValue;
 
             // Truncate the text if it exceeds the maximum length
-            if(currentText.Length > maxUsernameLength )
+            if (currentText.Length > maxUsernameLength)
             {
                 usernameField.value = currentText.Substring(0, maxUsernameLength);
             }
