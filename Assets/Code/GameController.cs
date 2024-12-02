@@ -11,6 +11,8 @@ public class GameController : MonoBehaviour
     public Transform[] spawnPoints;
     public GameObject[] enemyPrefabs;
     public TMP_Text textScore;
+    public TMP_Text textMoney;
+    public TMP_Text textHealth;
 
     // Configuration
     public float maxEnemyDelay = 2f;
@@ -21,6 +23,7 @@ public class GameController : MonoBehaviour
     public float enemyDelay;
     public float missileSpeed = 2f;
     public int score;
+    public int money;
 
     void Awake()
     {
@@ -49,10 +52,13 @@ public class GameController : MonoBehaviour
     void UpdateDisplay()
     {
         textScore.text = score.ToString();
+        textMoney.text = money.ToString();
+        textHealth.text = "Health - " + PlayerMovement.instance.health;
     }
 
     public void EarnPoints(int pointAmount)
     {
+        money += Mathf.RoundToInt(pointAmount + 10);
         score += Mathf.RoundToInt(pointAmount);
     }
 

@@ -1,18 +1,21 @@
 using UnityEngine;
-using UnityEngine.AdaptivePerformance.VisualScripting;
 using UnityEngine.UI;
+using TMPro;
 
 public class PlayerMovement : MonoBehaviour
 {
     public static PlayerMovement instance;
 
     public GameObject projectilePrefab;     // Reference to Projectile
-    public Image imageHealthBar;  // Reference to UI Healthbar
+    public Image imageHealthBar;            // Reference to UI Healthbar
+    public TMP_Text healthPriceText;        // Reference to shop health text
+    public TMP_Text firingPriceText;        // Reference to shop firing text
 
     public float moveSpeed = 5f;            // Speed of player movement (horizontal)
     public float jumpForce = 10f;           // Force of the jump (if you want to keep jumping functionality)
     public LayerMask groundLayer;           // Ground layer mask to check if player is grounded
-    public float firingTimer = 0f;          // Delay for firing projectile
+    public float firingTimer;               // Delay for firing projectile
+    public float fireRate = 2f;             // Save the previous firingTimer
     public float health = 100f;             // Players health amount
     public float healthMax = 100f;          // Players max health amount
     public bool isPaused;                   // If menu showing, pause the game
@@ -22,10 +25,13 @@ public class PlayerMovement : MonoBehaviour
     private float groundCheckDistance = 0.1f; // Distance to check for ground
 
     private bool isGrounded;                // Flag to check if player is grounded
+    private bool showingShop = false;               // Flag to check if shop is visible
 
     private void Awake()
     {
         instance = this;
+
+        firingTimer = 0;
 
         // Get references to the Rigidbody2D and BoxCollider2D
         rb = GetComponent<Rigidbody2D>();
@@ -37,12 +43,6 @@ public class PlayerMovement : MonoBehaviour
         if (isPaused)
         {
             return;
-        }
-
-        if (firingTimer > 0f)
-        {
-            // Subtract the different of the last time fired
-            firingTimer -= Time.deltaTime;
         }
 
         if (health > 0)
@@ -60,11 +60,27 @@ public class PlayerMovement : MonoBehaviour
                 Jump();
             }
 
+            firingTimer += Time.deltaTime;
+
             // Handle shooting projectile
-            if (Input.GetKeyDown(KeyCode.Space) && firingTimer <= 0)
+            if (Input.GetKey(KeyCode.Space) && firingTimer >= fireRate)
             {
                 FireProjectile();
-                firingTimer = 1f;
+                firingTimer = 0;
+            }
+
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                if (!showingShop)
+                {
+                    showingShop = true;
+                    MenuController.instance.ShowShopMenu();
+                }
+                else
+                {
+                    MenuController.instance.Hide();
+                    showingShop = false;
+                }
             }
         }
     }
@@ -112,6 +128,38 @@ public class PlayerMovement : MonoBehaviour
         }
 
         imageHealthBar.fillAmount = health / healthMax;
+    }
+
+    public void UpgradeHealth()
+    {
+        int cost = Mathf.RoundToInt(healthMax);
+
+        if(GameController.instance.money >= cost)
+        {
+            GameController.instance.money -= cost;
+
+            health += 50;
+            healthMax += 50;
+            imageHealthBar.fillAmount = health / healthMax;
+
+            healthPriceText.text = "Health\n" + Mathf.RoundToInt(healthMax);
+        }
+    }
+
+    public void UpgradeFireRate()
+    {
+        int cost = 100 + Mathf.RoundToInt((1f - fireRate) * 100f);
+
+        if (GameController.instance.money >= cost)
+        {
+            GameController.instance.money -= cost;
+
+            fireRate = Mathf.Max(0.2f, fireRate - 0.05f);
+
+            int newCost = 100 + Mathf.RoundToInt((1f - firingTimer) * 100f);
+            firingPriceText.text = "Fire Speed\n" + newCost;
+
+        }
     }
 
     private void OnCollisionEnter2D(Collision2D other)
