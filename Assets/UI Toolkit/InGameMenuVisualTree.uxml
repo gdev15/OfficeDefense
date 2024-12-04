@@ -1,0 +1,19 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement name="VisualElement" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0.58); -unity-background-scale-mode: scale-to-fit; background-image: none; position: absolute; top: 0; left: 0; right: 0; bottom: 0;" />
+    <ui:VisualElement style="flex-grow: 1; position: relative; left: 0; top: 0; right: 0; bottom: 0;">
+        <ui:VisualElement name="VisualElement" style="flex-grow: 1; background-color: rgb(22, 22, 22); align-self: center; align-items: center; width: 50%; height: auto; justify-content: center; margin-top: 16%; margin-bottom: 16%; border-top-left-radius: 6px; border-top-right-radius: 6px; border-bottom-right-radius: 6px; border-bottom-left-radius: 6px;">
+            <ui:VisualElement style="flex-grow: 1; justify-content: center; align-self: center; align-items: center; flex-direction: column; flex-wrap: nowrap;">
+                <ui:VisualElement style="flex-grow: 1; justify-content: center; align-self: auto;">
+                    <ui:Button text="RESUME" parse-escape-sequences="true" display-tooltip-when-elided="true" name="ResumeButton" style="font-size: 17px; width: 200px; height: 60px; border-top-left-radius: 6px; border-top-right-radius: 6px; border-bottom-right-radius: 6px; border-bottom-left-radius: 6px; background-color: rgb(18, 120, 157); color: rgb(255, 255, 255); -unity-font-style: bold; margin-top: 5px; margin-right: 0; margin-bottom: 5px; margin-left: 0;" />
+                    <ui:Button text="RESTART" parse-escape-sequences="true" display-tooltip-when-elided="true" name="RestartButton" style="font-size: 17px; width: 200px; height: 60px; border-top-left-radius: 6px; border-top-right-radius: 6px; border-bottom-right-radius: 6px; border-bottom-left-radius: 6px; background-color: rgb(18, 120, 157); color: rgb(255, 255, 255); -unity-font-style: bold; text-overflow: ellipsis; margin-top: 5px; margin-right: 0; margin-bottom: 5px; margin-left: 0;" />
+                    <ui:Button text="QUIT" parse-escape-sequences="true" display-tooltip-when-elided="true" name="QuitButton" style="font-size: 17px; width: 200px; height: 60px; border-top-left-radius: 6px; border-top-right-radius: 6px; border-bottom-right-radius: 6px; border-bottom-left-radius: 6px; background-color: rgb(18, 120, 157); color: rgb(255, 255, 255); -unity-font-style: bold; margin-top: 5px; margin-right: 0; margin-bottom: 5px; margin-left: 0;" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="VisualElement" style="flex-grow: 1; position: absolute; align-items: center; justify-content: flex-start; align-self: center; height: -35px; margin-top: 14%; margin-bottom: 14%;">
+            <ui:VisualElement name="VisualElement" style="flex-grow: 1; position: relative; left: auto; right: auto; top: auto; justify-content: flex-start; align-items: center; height: auto; transform-origin: center; width: auto; bottom: auto; align-self: center;">
+                <ui:Label tabindex="-1" text="PAUSE" parse-escape-sequences="true" display-tooltip-when-elided="true" name="PauseLabel" style="font-size: 40px; -unity-font-style: normal; color: rgb(255, 255, 255); -unity-text-align: upper-center; -unity-text-outline-width: 8px; -unity-text-outline-color: rgb(255, 255, 255); letter-spacing: 6px; -unity-font: initial; align-self: center; justify-content: flex-start; align-items: center; height: 16px;" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
