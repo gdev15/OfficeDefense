@@ -10,7 +10,7 @@ public class TitleScreenController : MonoBehaviour
 {
     private TextField usernameField;
     private UnityEngine.UIElements.Button playButton;
-    private const int maxUsernameLength = 20;
+    private const int maxUsernameLength = 12;
 
 
     private void Start()
