@@ -10,6 +10,7 @@ public class PlayerMovement : MonoBehaviour
     public Image imageHealthBar;            // Reference to UI Healthbar
     public TMP_Text healthPriceText;        // Reference to shop health text
     public TMP_Text firingPriceText;        // Reference to shop firing text
+    public Sprite[] projectileSprites;             // List for different projetile sprites
 
     public float moveSpeed = 5f;            // Speed of player movement (horizontal)
     public float jumpForce = 10f;           // Force of the jump (if you want to keep jumping functionality)
@@ -69,6 +70,7 @@ public class PlayerMovement : MonoBehaviour
                 firingTimer = 0;
             }
 
+            // Show shop/close shop when E is hit
             if (Input.GetKeyDown(KeyCode.E))
             {
                 if (!showingShop)
@@ -103,9 +105,16 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    // Timer to fire the projectile
     public void FireProjectile()
     {
-        Instantiate(projectilePrefab, transform.position + new Vector3(0, 0.8f, 0), Quaternion.identity);
+        GameObject projectile = Instantiate(projectilePrefab, transform.position + new Vector3(0, 0.8f, 0), Quaternion.identity);
+
+        // Get the SpriteRenderer of the projectile
+        SpriteRenderer spriteRenderer = projectile.GetComponent<SpriteRenderer>();
+        int randomIndex = Random.Range(0,4);
+        spriteRenderer.sprite = projectileSprites[randomIndex];
+        
     }
 
     private void Jump()
@@ -114,11 +123,13 @@ public class PlayerMovement : MonoBehaviour
         rb.velocity = new Vector2(rb.velocity.x, jumpForce);
     }
 
+    // The player runs out of health
     void Die()
     {
         MenuController.instance.ShowDeathMenu();
     }
 
+    // The player is hit by an enemy
     void TakeDamage(float damageAMount)
     {
         health -= damageAMount;
@@ -130,6 +141,7 @@ public class PlayerMovement : MonoBehaviour
         imageHealthBar.fillAmount = health / healthMax;
     }
 
+    // Upgrade Health powerup
     public void UpgradeHealth()
     {
         int cost = Mathf.RoundToInt(healthMax);
@@ -146,22 +158,31 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    // Upgrade firerate powerup
     public void UpgradeFireRate()
     {
-        int cost = 100 + Mathf.RoundToInt((1f - fireRate) * 100f);
+        if (fireRate != 0.2f) {
+            int cost = 20 + Mathf.RoundToInt((2f - fireRate) * 100f);
+            Debug.Log(cost);
 
-        if (GameController.instance.money >= cost)
+            if (GameController.instance.money >= cost)
+            {
+                GameController.instance.money -= cost;
+
+                fireRate = Mathf.Max(0.2f, fireRate - 0.05f);
+
+                int newCost = 20 + Mathf.RoundToInt((2f - fireRate) * 100f);
+
+                firingPriceText.text = "Fire Speed\n" + newCost;
+            }
+        }
+        if (fireRate == 0.2)
         {
-            GameController.instance.money -= cost;
-
-            fireRate = Mathf.Max(0.2f, fireRate - 0.05f);
-
-            int newCost = 100 + Mathf.RoundToInt((1f - firingTimer) * 100f);
-            firingPriceText.text = "Fire Speed\n" + newCost;
-
+            firingPriceText.text = "Fire Speed\nMaxed";
         }
     }
 
+    // If the player gets hit by an enemy
     private void OnCollisionEnter2D(Collision2D other)
     {
         if (other.gameObject.GetComponent<EnemyController>())

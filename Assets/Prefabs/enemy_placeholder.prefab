@@ -176,3 +176,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   randomAI: 0
+  spriteOptions:
+  - {fileID: -964529759, guid: caada25629f69034fb5db5fe23df3630, type: 3}
+  - {fileID: -1888226628, guid: caada25629f69034fb5db5fe23df3630, type: 3}
+  - {fileID: 2144571949, guid: caada25629f69034fb5db5fe23df3630, type: 3}
+  - {fileID: -428332088, guid: caada25629f69034fb5db5fe23df3630, type: 3}
