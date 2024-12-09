@@ -9,14 +9,21 @@ using UnityEngine.UIElements;
 public class TitleScreenController : MonoBehaviour
 {
     private TextField usernameField;
+    private Label usernameAlert;
     private UnityEngine.UIElements.Button playButton;
     private const int maxUsernameLength = 12;
 
 
     private void Start()
     {
+     
+
         // Get the root VisualElement from the UIDocument
         var root = GetComponent<UIDocument>().rootVisualElement;
+
+        // Find the label LabelUsernameAlert
+        usernameAlert = root.Q<Label>("LabelUsernameAlert");
+        usernameAlert.text = " ";
 
         if (root == null)
         {
@@ -33,6 +40,8 @@ public class TitleScreenController : MonoBehaviour
             Debug.LogError("UI elements not found in UXML.");
             return;
         }
+
+        
 
         // Add event listener to validate username input
 
@@ -58,6 +67,7 @@ public class TitleScreenController : MonoBehaviour
         // Validate username (optional, e.g., ensure it's not empty)
         if (string.IsNullOrEmpty(username))
         {
+            usernameAlert.text = "Username Needed!";
             Debug.LogWarning("Username cannot be empty.");
             return;
         }
