@@ -472,6 +472,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a66ba6fe3ba1ce4e94a27ab22d8ff16, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  audioSource: {fileID: 44280431}
+  clickSFX: {fileID: 8300000, guid: b62c2803d5b5065449375c8815bd51a5, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
