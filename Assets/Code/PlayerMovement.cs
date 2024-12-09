@@ -12,6 +12,9 @@ public class PlayerMovement : MonoBehaviour
     public TMP_Text firingPriceText;        // Reference to shop firing text
     public Sprite[] projectileSprites;             // List for different projetile sprites
 
+    public AudioSource audioSource;
+    public AudioClip fireSFX;
+
     public float moveSpeed = 5f;            // Speed of player movement (horizontal)
     public float jumpForce = 10f;           // Force of the jump (if you want to keep jumping functionality)
     public LayerMask groundLayer;           // Ground layer mask to check if player is grounded
@@ -20,6 +23,7 @@ public class PlayerMovement : MonoBehaviour
     public float health = 100f;             // Players health amount
     public float healthMax = 100f;          // Players max health amount
     public bool isPaused;                   // If menu showing, pause the game
+
 
     private Rigidbody2D rb;                 // Reference to the Rigidbody2D
     private BoxCollider2D boxCollider;      // Reference to the BoxCollider2D
@@ -114,7 +118,13 @@ public class PlayerMovement : MonoBehaviour
         SpriteRenderer spriteRenderer = projectile.GetComponent<SpriteRenderer>();
         int randomIndex = Random.Range(0,4);
         spriteRenderer.sprite = projectileSprites[randomIndex];
-        
+
+        // Play the firing sound
+        if (audioSource != null && fireSFX != null)
+        {
+            audioSource.PlayOneShot(fireSFX);
+        }
+
     }
 
     private void Jump()
