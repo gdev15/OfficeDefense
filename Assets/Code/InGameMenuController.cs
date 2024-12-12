@@ -12,10 +12,14 @@ public class InGameMenuController : MonoBehaviour
     private Button quitButton;
     private bool isPaused = false;
 
+    private AudioListener audioSound;
+
     private UIDocument uiDocument;
 
     void Start()
     {
+
+
         // Get reference to the UIDocument and its root
         uiDocument = GetComponent<UIDocument>();
         root = uiDocument.rootVisualElement;
@@ -53,6 +57,7 @@ public class InGameMenuController : MonoBehaviour
     // Pause the game
     public void PauseGame()
     {
+        MuteAllSound();
         root.style.display = DisplayStyle.Flex; // Show the UI
         Time.timeScale = 0f; // Stop the game time
         isPaused = true;
@@ -61,6 +66,7 @@ public class InGameMenuController : MonoBehaviour
     // Resume the game
     public void ResumeGame()
     {
+        UnmuteAllSound();
         root.style.display = DisplayStyle.None; // Hide the UI
         Time.timeScale = 1f; // Resume the game time
         isPaused = false;   
@@ -69,6 +75,7 @@ public class InGameMenuController : MonoBehaviour
     // Restart the current level
     public void RestartLevel()
     {
+        UnmuteAllSound();
         Time.timeScale = 1f; // Ensure game time resumes
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
@@ -76,7 +83,21 @@ public class InGameMenuController : MonoBehaviour
     // Quit to the main menu
     public void QuitToMainMenu()
     {
+        UnmuteAllSound();
         Time.timeScale = 1f; // Ensure game time resumes
         SceneManager.LoadScene("TitleScreen"); // Replace with your actual main menu scene name
+    }
+
+
+    // Mute Sound
+    public void MuteAllSound()
+    {
+        AudioListener.volume = 0;
+    }
+
+    // Unmute Sound
+    public void UnmuteAllSound()
+    {
+        AudioListener.volume = 0.25f;
     }
 }

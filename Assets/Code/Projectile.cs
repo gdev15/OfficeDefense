@@ -6,6 +6,8 @@ public class Projectile : MonoBehaviour
 {
     // Outlets
     Rigidbody2D _rb;  // Reference to projectile Rigidbody
+    public AudioSource _audioSource;
+    public AudioClip _audioClip;
 
     //Methods
     void Start()
